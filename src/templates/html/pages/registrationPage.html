@@ -1,0 +1,152 @@
+{{template "base" . }}
+
+{{ define "title" }}Registration - Forum{{ end }}
+
+{{define "bodyTitle"}}Registration{{ end }}
+
+{{define "body"}}
+
+<form class="validateButton" action="/registration" enctype="multipart/form-data" method="POST">
+    <div class="bg-gray-200 w-full h-full">
+
+        <div class=" flex justify-center ">
+            <div class="mt-8 mb-6 md:w-1/2 xl:w-1/4 justify-center">
+                <p class="font-semibold text-center text-2xl mb-2">Vous avez déja un compte ?</p>
+                <a href="/login">
+                    <div
+                        class="w-full bg-gray-700 hover:bg-gray-800 transition duration-300 text-white border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-3 px-2 text-center text-bold ">
+                        <p>Cliquez ici</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class=" flex justify-center ">
+            <div class="mt-8 mb-6 md:w-1/2 xl:w-1/6 flex-row justify-center">
+                <p class="font-semibold text-center text-2xl mb-12">Entrez votre prénom :</p>
+                <p class="font-semibold text-center text-2xl mb-2">Entrez votre nom :</p>
+
+            </div>
+            <div class="mt-8 mb-6 md:w-1/2 xl:w-1/6 flex-row ml-3">
+                <input type="text" name="prenom" id="prenom" placeholder="Prénom"
+                    class="w-full bg-gray-700 text-white transition border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-3 text-center mb-8">
+
+                <input type="text" name="nom" id="nom" placeholder="Nom"
+                    class=" w-full bg-gray-700 text-white transition border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-3 text-center">
+                <p class="text-red-600 text-center mt-2">{{.Error.Name}}</p>
+            </div>
+
+        </div>
+
+        <div class="w-full flex justify-center">
+            <div class="mt-8 mb-6 md:w-1/2 xl:w-1/3 justify-center">
+                <p class="font-semibold text-center text-2xl mb-2">Confirmez votre adresse mail</p>
+                <input type="text" name="email" id="email" placeholder="Confirmation de l'adresse email"
+                    class="w-full bg-gray-700 text-white transition border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-3 text-center">
+                <p class="text-red-600 text-center mt-2">{{.Error.Mail}} </p>
+            </div>
+        </div>
+
+        <div class="w-full flex justify-center">
+            <div class="mt-8 mb-6 md:w-1/2 xl:w-1/3 justify-center">
+                <p class="font-semibold text-center text-2xl mb-2">Choisissez un mot de passe</p>
+                <input type="password" name="password" id="password" placeholder="Mot de passe"
+                    class="w-full bg-gray-700 text-white transition border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-3 text-center">
+                <div class="text-center mt-2">
+                    <input type="checkbox" onclick="passwordhidin()"> Voir le mot de passe
+                </div>
+                <p class="text-red-600 text-center mt-2">{{.Error.Passwd}} </p>
+            </div>
+        </div>
+
+        <div class="w-full flex justify-center">
+            <p class="font-semibold text-center text-2xl mb-2 mt-6">Description du profil</p>
+            <div class="my-5 w-full px-5 justify-center">
+                <textarea name="description" id="description" rows="10" placeholder="Description"
+                    class=" text-xl w-full bg-gray-700 text-white transition border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-4 px-12 pb-24 overflow-auto"></textarea>
+            </div>
+        </div>
+
+        <div class="w-full flex justify-center">
+            <div class="mt-5 mb-6 md:w-1/2 xl:w-1/3 justify-center">
+                <p class="font-semibold text-center text-2xl mb-2">Séléctionnez une photo de profil</p>
+                <div class="w-full flex flex-col justify-around">
+                    <div class="flex justify-center">
+                        <img style="width: 150px;" src="../../fileServer/pagesImgs/pictoPhotoo.png">
+                    </div>
+                    <div class="flex justify-center">
+                        <input id="profilPicture" name="profilPicture" type="file">
+                        </input>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="w-full flex justify-center">
+            <div class="mt-5 mb-6 md:w-1/2 xl:w-1/3 flex justify-center">
+                <div class="dropdown dropdown-lang justify-center">
+                    <p class="font-semibold text-center text-2xl mb-2">Sélectionnez votre language / Select your
+                        language</p>
+
+                    <div class="w-full flex justify-center">
+                        <button onclick="dropFlag()" name="nationality" id="myFlag"
+                            class="dropdown-toggle px-4 py-2 m-8 bg-gray-800 hover:bg-gray-700 rounded" type="button">
+                            <span class="flag-icon flag-icon-fr"></span><a value="French"
+                                class="dropdown-item current block "></span>Français</a>
+                        </button>
+                    </div>
+
+                    <input type="hidden" id="isHere" value="hidden">
+                    <div id="flag">
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="w-full flex justify-center pb-10">
+            <button id="coche" name="validate" type="submit" value="upload"><img
+                    src="../../fileServer/pagesImgs/validate.png">
+                <h5>Valider</h5>
+            </button>
+        </div>
+    </div>
+
+
+    </div>
+</form>
+
+<script>
+    function passwordhidin() {
+        var x = document.getElementById("password");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+
+    function userFlag(item) {
+        userflag = document.getElementById("myFlag")
+        userflag.children[1].text = item.text
+        userflag.children[0].className = item.children[0].className
+
+    }
+
+    function dropFlag() {
+        var buttonDiv = document.getElementById("flag");
+        var isHere = document.getElementById("isHere");
+        if (isHere.value == "hidden") {
+            var dropdown = '<div id="flagDropdown" class="flex justify-around  p-4 m-8 mt-0 bg-gray-700 rounded"> <div class="dropdown-list"> <a value="English"onclick="userFlag(this)" class="dropdown-item block my-4 mx-2 rounded hover:bg-gray-600 p-1" ><span class="flag-icon flag-icon-us"></span> English</a> <a value="Italian"onclick="userFlag(this)" class="dropdown-item block my-4 mx-2 rounded hover:bg-gray-600 p-1"><span class="flag-icon flag-icon-it"></span> Italiano</a> <a value="Spanish"onclick="userFlag(this)" class="dropdown-item block my-4 mx-2 rounded hover:bg-gray-600 p-1"><span class="flag-icon flag-icon-es"></span> Español</a> <a value="Belarus"onclick="userFlag(this)" class="dropdown-item block my-4 mx-2 rounded hover:bg-gray-600 p-1"><span class="flag-icon flag-icon-by"></span> Беларускi</a> <a value="Polish" onclick="userFlag(this)" class="dropdown-item block my-4 mx-2 rounded hover:bg-gray-600 p-1"><span class="flag-icon flag-icon-pl"></span> Polski</a> <a value="German"onclick="userFlag(this)" class="dropdown-item block my-4 mx-2 rounded hover:bg-gray-600 p-1"><span class="flag-icon flag-icon-li"></span> Lietuviu</a> <a value="Chinese"onclick="userFlag(this)" class="dropdown-item block my-4 mx-2 rounded hover:bg-gray-600 p-1"><span class="flag-icon flag-icon-cn"></span> Chinese</a> </div> <div class="dropdown-list"> <a value="German"onclick="userFlag(this)" class="dropdown-item block my-4 mx-2 rounded hover:bg-gray-600 p-1"><span class="flag-icon flag-icon-de"></span> Deutsch</a> <a value="French"onclick="userFlag(this)" class="dropdown-item block my-4 mx-2 rounded hover:bg-gray-600 p-1"><span class="flag-icon flag-icon-fr"></span> Français</a> <a value="Russian"onclick="userFlag(this)" class="dropdown-item block my-4 mx-2 rounded hover:bg-gray-600 p-1"><span class="flag-icon flag-icon-ru"></span> Русский</a> <a value="Ukrainian"onclick="userFlag(this)" class="dropdown-item block my-4 mx-2 rounded hover:bg-gray-600 p-1"><span class="flag-icon flag-icon-ua"></span> Українська</a> <a value="Czech" onclick="userFlag(this)" class="dropdown-item block my-4 mx-2 rounded hover:bg-gray-600 p-1"><span class="flag-icon flag-icon-cz"></span> Česky</a> <a value="French" onclick="userFlag(this)" class="dropdown-item block my-4 mx-2 rounded hover:bg-gray-600 p-1"><span class="flag-icon flag-icon-ch"></span> 中國</a> <a value="Tamil" onclick="userFlag(this)" class="dropdown-item block my-4 mx-2 rounded hover:bg-gray-600 p-1"><span class="flag-icon flag-icon-in"></span> தமிழ்</a> </div> </div>'
+            buttonDiv.insertAdjacentHTML("afterbegin", dropdown);
+            isHere.value = "showed"
+        } else if (isHere.value == "showed") {
+            buttonDiv.innerHTML = '';
+            isHere.value = "hidden"
+        }
+    }
+</script>
+
+{{ end }}

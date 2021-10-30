@@ -1,0 +1,19 @@
+{{template "base" . }}
+{{ define "title" }}error{{ end }}
+{{define "bodyTitle"}} Erreur d'accès {{ end }}
+{{define "username"}} {{.Name}} {{ end }}
+{{define "body"}}
+
+<div class="bg-gray-200 w-full rounded-b-lg">
+    <div class=" flex justify-center ">
+        <div class="mt-48 mb-48 mb-6 md:w-1/2 xl:w-1/4 justify-center">
+            <p class="font-semibold text-center text-2xl mb-2">Pour revenir à la page d'acceuil</p>
+            <a href="/" >
+                <div class="text-2xl w-full bg-gray-700 hover:bg-gray-800 transition duration-300 text-white border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-3 px-2 text-center text-bold ">
+                    <p>Cliquez ici</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+{{ end }}

@@ -1,0 +1,139 @@
+{{template "base" . }}
+{{ define "title" }}Create Post{{ end }}
+{{define "bodyTitle"}} {{ .Post.Title }} {{ end }}
+{{define "username"}} {{.User.Name}} {{ end }}
+{{define "body"}}
+
+<div class="flex flex-row flex-wrap flex-grow mt-2">
+  <div class="w-full p-6">
+    <!--Graph Card-->
+    <div class="bg-white border-transparent rounded-lg shadow-xl">
+      <form action="/userPage" method="POST">
+        <div
+          class="bg-gradient-to-b from-gray-300 to-gray-100 text-gray-800 border-b-2 border-gray-300 rounded-tl-lg rounded-tr-lg p-2">
+          <h5 class="text-gray-600 text-2xl ml-12">Posté par <button type="submit" class="font-bold" name="user"
+              value="{{.Post.UserID}}">{{.Post.Owner}}</button> le {{.Post.Date}}</h5>
+        </div>
+      </form>
+
+      <div class="w-full p-8">
+        <h6 class="">{{ .Post.Content }}</h6>
+      </div>
+    </div>
+    <div class="flex flex-row-reverse mr-24 mt-3">
+      <form action="/postLike" method="POST">
+        <button name="PouceVert" type="submit" value="{{.Post.ID}}" class="hiddenButton"><img
+            src=" ../../fileServer/pagesImgs/PouceVert.png" height="50" width="50" class="imageClass" /></button>
+        {{.Post.Likes}}
+      </form>
+      <form action="/postDislike" method="POST">
+        <button name="PouceRouge" type="submit" value="{{.Post.ID}}" class="hiddenButton"><img
+            src=" ../../fileServer/pagesImgs/PouceRouge.png" height="50" width="50" class="imageClass" /></button>
+        {{.Post.Dislikes}}
+      </form>
+    </div>
+    <!-- likes -->
+    {{if ne .User.Perms 0}}
+    <form action="/supprPostPage" method="POST" class="flex">
+      <button value="{{.Post.ID}}" type="submit" name="supprPost"
+        class=" bg-gray-700 hover:bg-gray-800 transition duration-300 text-white border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-1 px-2 text-center text-bold">Supprimer</button>
+    </form>
+    {{else if eq .User.ID .Post.UserID}}
+    <form action="/supprPostPage2" method="POST" class="flex">
+      <button value="{{.Post.ID}}" type="submit" name="supprPost"
+        class=" bg-gray-700 hover:bg-gray-800 transition duration-300 text-white border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-1 px-2 text-center text-bold">Supprimer</button>
+    </form>
+    {{end}}
+  </div>
+
+  <div class="w-full mt-6">
+    <form class="w-full" action="/createComment" method="POST">
+      <h5 class="font-bold uppercase text-gray-600 text-center w-full text-2xl italic">Poster un Commentaire</h5>
+
+      <div class="w-full flex justify-center">
+        <div class="my-5 w-5/6 px-5 justify-center">
+
+          <textarea name="content" rows="3" placeholder="Commentaire.."
+            class=" text-xl w-full bg-gray-700 text-white transition border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-4 px-12 pb-24 overflow-auto"></textarea>
+        </div>
+        <div class="ml-8 mt-24">
+          <button id="coche" name="postID" type="submit" value="{{.Post.ID}}"> <img
+              src="../../fileServer/pagesImgs/validate.png">
+            <h5>Mettre en ligne <br>le commentaire</h5>
+          </button>
+        </div>
+        <input type="hidden" name="postID" value="{{.Post.ID}}">
+      </div>
+    </form>
+
+    <h5 class="font-bold uppercase text-gray-600 text-center w-full text-2xl italic pb-2">Commentaires</h5>
+
+    <div class="flex flex-col pb-10 w-full">
+      {{ if .IsNoComments }}
+      <div class="flex justify-around my-5">
+        <div class="bg-white border-transparent rounded-lg shadow-xl w-5/6 flex">
+          <h6 class="text-center p-10">Aucun commentaire n'a été publié</h6>
+        </div>
+      </div>
+
+      {{else}}
+      {{range .Comments}}
+      <div class="flex justify-around {{if eq .ParentID 0}} flex mt-4 {{else}} my-2 {{end}}">
+        <div class="w-5/6 {{if ne .ParentID 0}} flex {{end}}">
+          {{if ne .ParentID 0}} <div class="inline">
+            <img src="../../fileServer/pagesImgs/reply.png" style="width: 75px;">
+          </div> {{end}}
+          <div class=" {{if ne .ParentID 0}} ml-8 {{end}} bg-white border-transparent rounded-lg shadow-xl w-5/6">
+            <form action="/userPage" method="POST">
+              <div
+                class="bg-gradient-to-b from-gray-300 to-gray-100 text-gray-800 border-b-2 border-gray-300 rounded-tl-lg rounded-tr-lg p-2">
+                <h5 class="text-gray-600 ">{{if ne .ParentID 0}} Réponse postée par {{else}} Posté par {{end}} <button
+                    type="submit" class="font-bold" name="user" value="{{.UserID}}">{{.Owner}}</button> le {{ .Date }}
+                </h5>
+              </div>
+            </form>
+            <div class="w-4/6 p-5">
+              <p class="" style="word-wrap: break-word;">{{ .Content }}</p>
+            </div>
+          </div>
+
+          {{if eq .ParentID 0}}
+          <div id="dropComment" value="{{.ID}}" class="flex flex-row-reverse mr-6 mt-3">
+            <button onclick="dropComment(this)" value="{{.ID}}" type="button"
+              class=" bg-gray-700 hover:bg-gray-800 transition duration-300 text-white border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-1 px-2 mb-2 text-center text-bold">Répondre</button>
+          </div>
+          {{end}}
+
+          <form action="/createComment" method="POST">
+            <input type="hidden" name="postID" value="{{.PostID}}">
+            <input type="hidden" id="isHere{{.ID}}" value="hidden">
+            <div id="commentN{{.ID}}" name="hidden" class="flex flex-row justify-center">
+
+            </div>
+          </form>
+        </div>
+      </div>
+      {{end}}
+      {{end}}
+    </div>
+
+  </div>
+</div>
+
+<script>
+
+  function dropComment(id) {
+    var buttonDiv = document.getElementById("commentN" + id.value);
+    var isHere = document.getElementById("isHere" + id.value);
+    if (isHere.value == "hidden") {
+      var comment = '<textarea name="content" rows="2" placeholder="Commentaire.." class="mb-3 text-xl w-5/6 bg-gray-700 text-white transition border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-4 px-12  overflow-auto"></textarea> <div class="flex flex-col-reverse"> <button name="parentID" value="' + id.value + '" type="submit" class=" bg-gray-700 hover:bg-gray-800 transition duration-300 text-white border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-1 px-2 mb-2 ml-2 text-center text-bold">Envoyer</button> </div>'
+      buttonDiv.insertAdjacentHTML("afterbegin", comment);
+      isHere.value = "showed"
+    } else if (isHere.value == "showed") {
+      buttonDiv.innerHTML = '';
+      isHere.value = "hidden"
+    }
+  }
+</script>
+
+{{ end }}

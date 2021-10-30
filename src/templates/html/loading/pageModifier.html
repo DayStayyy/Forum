@@ -1,0 +1,20 @@
+{{template "base" . }}
+{{ define "title" }}loading{{ end }}
+{{define "bodyTitle"}} loading {{ end }}
+{{define "username"}}{{ end }}
+{{define "body"}}
+
+<!-- AJOUTER UN BOUTON QUI EST CLIQUE AUTOMATIQUEMENT ET QUI ENVOIE L'ID DU POST A LA PAGE POSTPAGE -->
+<div>
+    <form action="/profilSettings" method="POST">
+        <button id="quitPage" name="user" type="submit" value="{{.User.ID}}"> </button>
+    </form>
+</div>
+
+<script text="text/javascript">
+    window.onload = function () {
+        document.getElementById('quitPage').click();
+    }
+</script>
+
+{{end}}

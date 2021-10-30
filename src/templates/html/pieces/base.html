@@ -1,0 +1,31 @@
+<!--FORUM YNOV INFORMATIQUE 2020
+Copyright INGREMEAU, CLAMADIEU-THARAUD, MICHEL 2021 -->
+
+{{ define "base"}}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{template "title" . }}</title>
+    <link rel="shortcut icon" href="#">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.0.0/css/flag-icon.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/gh/cosmogicofficial/quantumalert@latest/minfile/quantumalert.js"
+        charset="utf-8"></script>
+</head>
+
+<body class="bg-gray-800 font-sans leading-normal tracking-normal mt-8">
+    <div class="wrapper">
+        {{ template "header" .}}
+
+    </div>
+    {{ template "footer" .}}
+</body>
+
+</html>
+
+{{ end }}

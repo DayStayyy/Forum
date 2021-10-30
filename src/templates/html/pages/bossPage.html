@@ -1,0 +1,216 @@
+{{template "base" . }}
+
+{{ define "title" }}BossPage - Forum{{ end }}
+
+{{define "bodyTitle"}}BossPage{{ end }}
+
+{{define "username"}}{{.User.Name}}{{ end }}
+
+{{define "body"}}
+
+
+
+<!--POSTS-->
+<div class="flex flex-row flex-wrap flex-grow mt-2 ">
+    <div class="w-full p-6">
+        <!--Graph Card-->
+        <div class="bg-white border-transparent rounded-lg shadow-x h-full">
+            <div
+                class="bg-gradient-to-b from-gray-300 to-gray-100 text-gray-800 border-b-2 border-gray-300 rounded-tl-lg rounded-tr-lg p-2">
+                <h5 class="font-bold ml-4 uppercase text-gray-600">Derniers posts</h5>
+            </div>
+            <div class="flex flex-row justify-between">
+                {{range .Posts}}
+                <div class="w-1/2 p-6">
+                    <div class="bg-white border-transparent rounded-lg shadow-xl">
+                        <div
+                            class=" bg-gradient-to-b from-gray-300 to-gray-100 text-gray-800 border-b-2 border-gray-300 rounded-tl-lg rounded-tr-lg p-2 flex flex-col ">
+                            <form action="/postPage" method="POST">
+                                <div class="w-auto flex justify-center">
+                                    <button name="postID" type="submit" value={{.ID}}
+                                        class="font-bold text-3xl text-gray-600 text-left">{{.Title}}</button>
+                                </div>
+                            </form>
+                            <form action="/userPage" method="POST">
+                                <div class="w-auto flex justify-center">
+                                    <h5 class="text-gray-600 text-2xl"><button type="submit" class="font-bold"
+                                            name="user" value="{{.UserID}}">{{.Owner}}</button> le {{.Date}}</h5>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="p-5">
+                            <p class="font-bold text-gray-600">{{.Content}}</p>
+                        </div>
+                    </div>
+                    <div class="flex mr-12">
+                        <p class="ml-1 text-gray-600">Catégories :</p>
+                        {{range .Categories}}
+                        <p class="ml-1 text-gray-600">{{.}}</p>
+                        {{end}}
+                    </div>
+                    <div class="flex flex-row-reverse">
+                        <img src=" ../../fileServer/pagesImgs/PouceVert.png" height="35" width="35"
+                            class="imageClass" />
+                        {{.Likes}}
+                        <img src=" ../../fileServer/pagesImgs/PouceRouge.png" height="35" width="35"
+                            class="mr-2 imageClass" />
+                        {{.Dislikes}}
+                    </div>
+
+                    <form action="/supprPostPage" method="POST" class="flex">
+                        <button value="{{.ID}}" type="submit" name="supprPost"
+                            class=" bg-gray-700 hover:bg-gray-800 transition duration-300 text-white border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-1 px-2 text-center text-bold">Supprimer</button>
+                    </form>
+                </div>
+                {{end}}
+            </div>
+        </div>
+
+
+    </div>
+    <!--/Graph Card-->
+</div>
+{{if eq .User.Perms 2}}
+<!--Users if Admin-->
+<div class="flex mt-2 ">
+    <div class="w-full p-6">
+        <!--Graph Card-->
+        <div class="bg-white border-transparent rounded-lg shadow-x h-full">
+            <div
+                class="bg-gradient-to-b from-gray-300 to-gray-100 text-gray-800 border-b-2 border-gray-300 rounded-tl-lg rounded-tr-lg p-2">
+                <h5 class="font-bold ml-4 uppercase text-gray-600">Utilisateurs</h5>
+            </div>
+            <div class="flex justify-around">
+                {{range .Users}}
+                <div class="flex justify-around m-1">
+                    <div
+                        class="bg-gradient-to-b from-gray-300 to-gray-100 text-gray-800 border-b-2 border-gray-300 rounded-tl-lg rounded-tr-lg p-2 flex mr-2">
+                        <form action="/userPage" method="POST">
+                            <div class="w-auto flex justify-center">
+                                <h5 class="text-gray-600 text-2xl"><button type="submit" class="font-bold" name="user"
+                                        value="{{.ID}}">{{.Name}}</button></h5>
+                            </div>
+                        </form>
+                    </div>
+                    {{if eq .Perms 2}}
+
+                    {{else}}
+                    <div class="mt-2 m-1">
+                        <form action="/supprAccountPage" method="POST" class="flex mt-2">
+                            <button value="{{.ID}}" name="supprUser" type="submit"
+                                class=" bg-gray-700 hover:bg-gray-800 transition duration-300 text-white border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-1 px-2 text-center text-bold">Supprimer</button>
+                        </form>
+                    </div>
+
+                    {{end}}
+                    {{if eq .Perms 1}}
+                    <div class="mt-2 m-1">
+                        <form action="/modifyModo" method="POST" class="flex mt-2">
+                            <button value="{{.ID}}" name="demote" type="submit"
+                                class=" bg-gray-700 hover:bg-gray-800 transition duration-300 text-white border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-1 px-2 text-center text-bold">Demote</button>
+                        </form>
+                    </div>
+
+                    {{else if eq .Perms 2}}
+
+                    {{else}}
+                    <div class="mt-2 m-1">
+                        <form action="/supprAccountPage" method="POST" class="flex mt-2">
+                            <button value="{{.ID}}" name="promote" type="submit"
+                                class=" bg-gray-700 hover:bg-gray-800 transition duration-300 text-white border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-1 px-2 text-center text-bold">Promote</button>
+                        </form>
+                    </div>
+
+                    {{end}}
+                </div>
+                {{end}}
+            </div>
+        </div>
+    </div>
+    <!--/Graph Card-->
+</div>
+{{else if eq .User.Perms 1}}
+<!--Users if Admin-->
+<div class="flex mt-2 ">
+    <div class="w-full p-6">
+        <!--Graph Card-->
+        <div class="bg-white border-transparent rounded-lg shadow-x h-full">
+            <div
+                class="bg-gradient-to-b from-gray-300 to-gray-100 text-gray-800 border-b-2 border-gray-300 rounded-tl-lg rounded-tr-lg p-2">
+                <h5 class="font-bold ml-4 uppercase text-gray-600">Utilisateurs</h5>
+            </div>
+            <div class="flex justify-around">
+                {{range .Users}}
+                <div class="flex justify-around m-1">
+                    <div
+                        class="bg-gradient-to-b from-gray-300 to-gray-100 text-gray-800 border-b-2 border-gray-300 rounded-tl-lg rounded-tr-lg p-2 flex ">
+                        <form action="/userPage" method="POST">
+                            <div class="w-auto flex justify-center">
+                                <h5 class="text-gray-600 text-2xl"><button type="submit" class="font-bold" name="user"
+                                        value="{{.ID}}">{{.Name}}</button></h5>
+                            </div>
+                        </form>
+                    </div>
+                    {{if eq .Perms 2}}
+
+                    {{else if eq .Perms 1}}
+
+                    {{else}}
+                    <div class="mt-2 m-1">
+                        <form action="/supprAccountPage" method="POST" class="flex mt-2">
+                            <button value="{{.ID}}" name="supprUser" type="submit"
+                                class=" bg-gray-700 hover:bg-gray-800 transition duration-300 text-white border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-1 px-2 text-center text-bold">Supprimer</button>
+                        </form>
+                    </div>
+
+                    {{end}}
+                </div>
+                {{end}}
+            </div>
+        </div>
+    </div>
+    <!--/Graph Card-->
+</div>
+{{else}}
+<!--Users if not admin-->
+<div class="flex mt-2 ">
+    <div class="w-full p-6">
+        <!--Graph Card-->
+        <div class="bg-white border-transparent rounded-lg shadow-x h-full">
+            <div
+                class="bg-gradient-to-b from-gray-300 to-gray-100 text-gray-800 border-b-2 border-gray-300 rounded-tl-lg rounded-tr-lg p-2">
+                <h5 class="font-bold ml-4 uppercase text-gray-600">Utilisateurs</h5>
+            </div>
+            <div class="flex justify-around">
+                {{range .Users}}
+                <div class="flex justify-around m-1">
+                    <div
+                        class="bg-gradient-to-b from-gray-300 to-gray-100 text-gray-800 border-b-2 border-gray-300 rounded-tl-lg rounded-tr-lg p-2 flex ">
+                        <form action="/postPage" method="POST">
+                            <div class="w-auto flex justify-center">
+                                <button name="postID" type="submit" value={{.ID}}
+                                    class="font-bold text-3xl text-gray-600 text-left">{{.Name}}</button>
+                            </div>
+                        </form>
+                    </div>
+                    {{if eq .Perms 2}}
+
+                    {{else}}
+                    <div class="mt-2 m-1">
+                        <form action="/supprAccountPage" method="POST" class="flex mt-2">
+                            <button value="{{.ID}}" name="supprUser" type="submit"
+                                class=" bg-gray-700 hover:bg-gray-800 transition duration-300 text-white border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-1 px-2 text-center text-bold">Supprimer</button>
+                        </form>
+                    </div>
+
+                    {{end}}
+                </div>
+                {{end}}
+            </div>
+        </div>
+    </div>
+    <!--/Graph Card-->
+</div>
+{{end}}
+{{ end }}

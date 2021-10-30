@@ -1,0 +1,84 @@
+{{template "base" . }}
+
+{{ define "title" }}Create Post{{ end }}
+
+{{define "bodyTitle"}}Create a post{{ end }}
+
+
+{{define "username"}} {{.User.Name}} {{ end }}
+
+{{define "body"}}
+
+<form class="validateButton" action="/createPost" method="POST">
+    <div class="bg-white border-transparent rounded-lg shadow-xl h-full">
+        <div class="flex flex-row flex-wrap flex-grow mt-2">
+            <div class="w-full p-6">
+                <div class="bg-white border-transparent rounded-lg">
+                    <div
+                        class="bg-gradient-to-b from-gray-300 to-gray-100  text-gray-800 border-b-2 border-gray-300 rounded-tl-lg rounded-tr-lg p-2 flex">
+                        <div class="my-2 w-1/3 ml-10">
+                            <input type="text" name="title" placeholder="Titre"
+                                class="w-full bg-gray-700 text-white transition border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-3 px-2 pl-12 text-2xl">
+                        </div>
+                        <div class="my-2 w-1/3 ml-10">
+                            <p class="ml-1 text-red-500 text-3xl font-semibold">{{.Errors.Title}}</p>
+                        </div>
+                    </div>
+                    <div class="w-full flex justify-center">
+                        <div class="my-5 w-full px-5 justify-center">
+                            <textarea name="content" rows="7" placeholder="Contenu du post"
+                                class=" text-xl w-full bg-gray-700 text-white transition border border-transparent focus:outline-none focus:border-gray-400 rounded-lg py-4 px-12 pb-24 overflow-auto"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center">
+                        {{ range .Categories}}
+                        <div class="md:w-1/3 xl:w-1/5 p-6">
+                            <!--Metric Card-->
+                            <div
+                                class="bg-gradient-to-b from-{{.Color}}-200 to-{{.Color}}-100 border-b-4 border-{{.Color}}-600 rounded-lg shadow-xl p-5">
+                                <div class="flex flex-row items-center">
+                                    <div class="pr-4">
+                                        <div class="rounded-full p-5 bg-{{.Color}}-600">
+                                            <input type="checkbox" name="Categories" value={{.ID}}
+                                                style="transform: scale(2.5); opacity:0.1;" />
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 text-right md:text-center">
+                                        <h5 class="font-bold uppercase text-gray-600">{{.Name}}</h5>
+                                        <h3 class="font-bold text-3xl"><span class="text-{{.Color}}-500"></span>
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/Metric Card-->
+                            </button>
+                        </div>
+                        {{end}}
+
+                    </div>
+                    <div class="w-full flex justify-center m-2">
+                        <p class="text-red-500 text-3xl font-semibold">{{.Errors.Categories}}</p>
+                    </div>
+                </div>
+
+                <div class="w-full flex justify-center pb-12">
+                    <button id="coche" name="validate" type="submit"><img src="../../fileServer/pagesImgs/validate.png">
+                        <h5>Mettre en ligne</h5>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    </div>
+
+
+    </div>
+
+    </div>
+</form>
+
+{{ end }}
